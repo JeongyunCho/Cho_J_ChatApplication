@@ -1,0 +1,23 @@
+{
+  "name": "cho_j_chatapplication",
+  "version": "1.0.0",
+  "description": "social media app",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JeongyunCho/Cho_J_ChatApplication.git"
+  },
+  "author": "TVR",
+  "license": "ISC",
+  "homepage": "https://github.com/JeongyunCho/Cho_J_ChatApplication#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "socket.io": "^2.2.0"
+  },
+  "bugs": {
+    "url": "https://github.com/JeongyunCho/Cho_J_ChatApplication/issues"
+  }
+}
