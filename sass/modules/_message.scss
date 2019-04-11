@@ -4,7 +4,7 @@
 
     width: 45%;
     padding: 8px 12px;
-    background-color: white; 
+    background-color: $blueGreen; 
     border-radius: 8px;
     margin-bottom: 1rem;
 
@@ -14,17 +14,28 @@
 
 .my-message {
     float: right !important;
-    background-color: #86bf9d;
+    background-color: $lightGreen;
     color: white;
 }
 .middle {
     margin: 0 auto 1rem;
     float: none;
     text-align: center;
+    background-color: white !important; 
 }
 .notification{
-    font-size: 0.7em;
+    font-size: $notiFont;
 }
 span{
-    font-size: 1.2em;
+    font-size: $spanFont;
+}
+#nick{
+    margin-top: 20%;
+}
+#darkmode{
+    margin: 20% 35% 0;
+    transition-duration: 0.5s;
+    &:hover{
+        transform:scale(1.1);
+    }
 }
