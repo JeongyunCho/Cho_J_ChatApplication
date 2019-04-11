@@ -2,39 +2,67 @@ import ChatMessage from './modules/ChatMessage.js';
 
 const socket = io();
 
-function setUserId({sID, message}) {
-    //debugger;
-    console.log('connected', sID, message);
+function logConnect({sID}) { //{sID, message}
+    console.log(sID);
     vm.socketID = sID;
+}
 
+function userNotification(message){
+    vm.notifications.push(message);
 }
 
 function appendMessage(message) {
     vm.messages.push(message);
 }
 
+// create Vue instance
 const vm = new Vue({
     data: {
         socketID: "",
         nickname: "",
         message: "",
-        messages: []
+        notifications: [],
+        typing: false,
+        messages: [],
+        usercount: ""
     },
+    watch: {
+        message(value) {
+          value ? socket.emit('typing', this.nickname) : socket.emit('stoptyping');
+        }
+      },
+    created() {
+        socket.on('typing', (data) => {
+          this.typing = data || "Anonymous";
+        });
+        socket.on('stoptyping', () => {
+          this.typing = false;
+        });
+        socket.on('usercount', (numUsers) => {
+            vm.usercount = numUsers;
+          });
+  
+      },
 
     methods: {
         dispatchMessage() {
-            // send a chat message
-            socket.emit('chat message', { content: this.message, name: this.nickname || "Anonymous"} );
+            // emit message event from the client side
+            socket.emit('chat message', { content: this.message, name: this.nickname || "Anonymous"});
 
+            // reset the message field
             this.message = "";
-        }
-    },
 
+        },
+        istyping() {
+            socket.emit('typing', this.nickname);
+          }
+    },
     components: {
         newmessage: ChatMessage
     }
-}).$mount("#app");
+}).$mount(`#app`);
 
-socket.addEventListener('connected', setUserId);
+socket.on('connected', logConnect);
+socket.on('notification', userNotification);
 socket.addEventListener('chat message', appendMessage);
-socket.addEventListener('disconnect', appendMessage);
+socket.addEventListener('disconnect', appendMessage); // this one is optional
