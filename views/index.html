@@ -5,21 +5,25 @@
 	<title>Socket IO Chat with Node!</title>
 	<link rel="stylesheet" href="css/main.css">
 	<script src="https://unpkg.com/vue"></script> 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.2/TweenMax.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/noframework.waypoints.js"></script>
 </head>
 <body>
 	<main id="app">		
 		<section class="form-container">
-			<label for="nickname">Your Nickname (optional)</label>
+			<label id="nick" for="nickname">Your Username (optional)</label>
 			<input v-model="nickname" type="text" id="nickname" class="nickname" placeholder="What is your nickname?">
 			
 			<form>
-				<label for="message">Something to say?</label>
+				<label for="message">Chat with Others!</label>
 				<textarea v-model="message" class="message" type="text" autocomplete="off" id="textarea"></textarea>
 				<input type="submit" @click.prevent="dispatchMessage">
 			</form>
 			<p v-if="typing" class="text-typing">{{typing}} is typing message</p>
 			<p>Current Users in the Chat: <span>{{usercount.numUsers}}</span></p>
-		
+			<div id="darkmode">
+			<img id="light" src="/images/moon.svg" alt="dark mode">
+			</div>
 		</section>
 
 		<section class="messages">
@@ -32,5 +36,6 @@
 	</main>
 	<script src="/socket.io/socket.io.js"></script>
 	<script type="module" src="js/main_vm.js"></script>
+
 </body>
 </html>

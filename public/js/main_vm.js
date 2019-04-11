@@ -24,7 +24,8 @@ const vm = new Vue({
         notifications: [],
         messages: [],
         typing: false,
-        usercount: ""
+        usercount: "",
+        toggleTheme: false
     },
     watch: {
         message(line) {
@@ -46,6 +47,21 @@ const vm = new Vue({
             this.usercount = numUsers;
           });
       },
+      mounted() {
+        var button = document.querySelector('#darkmode');
+        button.addEventListener('click', function () {
+            
+        if (this.toggleTheme === false) {
+            this.toggleTheme = true;
+            document.querySelector("body").classList.add('dark-theme');
+            document.querySelector("#light").src="/images/sunny.svg";
+        }else{
+            this.toggleTheme = false;
+            document.querySelector("body").classList.remove('dark-theme');
+            document.querySelector("#light").src="/images/moon.svg";
+        }
+        });
+      },
 
     methods: {
         dispatchMessage() {
@@ -58,7 +74,8 @@ const vm = new Vue({
         },
         isTyping() {
             socket.emit('typing', this.nickname);
-          }
+        },
+        
     },
     components: {
         newmessage: ChatMessage
