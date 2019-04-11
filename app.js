@@ -19,6 +19,7 @@ io.attach(server);
 
 var numUsers = 0;
 
+
 io.on('connection', function(socket) {
     console.log('new user has connected');
 
@@ -47,7 +48,7 @@ io.on('connection', function(socket) {
         io.emit('typing');
       });
 
-    socket.on('disconnect', function(info) {
+    socket.on('disconnect', function() {
         console.log('a user has disconnected');
         --numUsers;
         io.emit('usercount', { numUsers: numUsers});
