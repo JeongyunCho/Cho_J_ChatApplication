@@ -7,7 +7,7 @@ function logConnect({sID}) { //{sID, message}
     vm.socketID = sID;
 }
 
-function userNotification(message){
+function userNotification({message}){
     vm.notifications.push(message);
 }
 
@@ -39,9 +39,8 @@ const vm = new Vue({
           this.typing = false;
         });
         socket.on('usercount', (numUsers) => {
-            vm.usercount = numUsers;
+            this.usercount = numUsers;
           });
-  
       },
 
     methods: {
@@ -53,7 +52,7 @@ const vm = new Vue({
             this.message = "";
 
         },
-        istyping() {
+        isTyping() {
             socket.emit('typing', this.nickname);
           }
     },
@@ -64,5 +63,5 @@ const vm = new Vue({
 
 socket.on('connected', logConnect);
 socket.on('notification', userNotification);
+
 socket.addEventListener('chat message', appendMessage);
-socket.addEventListener('disconnect', appendMessage); // this one is optional

@@ -34,7 +34,7 @@ io.on('connection', function(socket) {
 
     // listen for an incoming message from anyone connected to the app
     socket.on('chat message', function(msg) {
-        console.log('message: ', msg, 'socket:', socket.id);
+        // console.log('message: ', msg, 'socket:', socket.id);
 
         // send the message to everyone connected to the app
         io.emit('chat message', { id: `${socket.id}`, message: msg, notification: "new user has connected"});
@@ -47,11 +47,11 @@ io.on('connection', function(socket) {
         io.emit('typing');
       });
 
-    socket.on('disconnect', function() {
+    socket.on('disconnect', function(info) {
         console.log('a user has disconnected');
         --numUsers;
         io.emit('usercount', { numUsers: numUsers});
-        io.emit('notification', { message: "user has disconnected"});
+        io.emit('notification', { message: "a user has disconnected"});
       
     });
 });
