@@ -17,12 +17,16 @@
 				<textarea v-model="message" class="message" type="text" autocomplete="off" id="textarea"></textarea>
 				<input type="submit" @click.prevent="dispatchMessage">
 			</form>
-		</section>
+			<p v-if="typing" class="text-typing">{{typing}} is typing message</p>
+			<p>Current Users in the Chat: <span>{{usercount.numUsers}}</span></p>
 		
+		</section>
+
 		<section class="messages">
+			<p class="new-message middle notification" v-if="notifications" v-for="notification in notifications"> {{ notification }}</p>
 			<ul id="messages" v-for="message in messages">
-				<!-- render the message component here -->
-				<newmessage :msg="message"></newmessage>				
+				<!-- render a new component for every message -->
+                <newmessage :msg="message"></newmessage>				
 			</ul>
 		</section>		
 	</main>

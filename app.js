@@ -1,41 +1,58 @@
-// initialize an express app and set it up 
-const express = require('express');
-const app = express();
-const io = require('socket.io')();
+var express = require('express');
+var app = express();
+var io = require('socket.io')();
 
-// some config stuff
 const port = process.env.PORT || 3000;
 
-// tell our app to use the public folder for static files
+// tell express where our static files are (js, images, css etc)
 app.use(express.static('public'));
 
-// instantiate the only route we need
-app.get('/', (req, res, next) => {
+app.get('/', (req, res) => {
     res.sendFile(__dirname + '/views/index.html');
 });
 
-// create server variable for socket.io to use
 const server = app.listen(port, () => {
     console.log(`app is running on port ${port}`);
 });
 
-// plug in the chat app package
 io.attach(server);
 
+var numUsers = 0;
+
+
 io.on('connection', function(socket) {
-    console.log('a user has connected');
-    socket.emit('connected', {sID: `${socket.id}`, message: 'new connection'} );
+    console.log('new user has connected');
 
-    // listen for incoming messages, and then send them to everyone
+    // get socket id to check the current user.
+    socket.emit('connected', { sID: `${socket.id}`} );
+    // add user count
+    ++numUsers;
+    io.emit('usercount', { numUsers: numUsers});
+    // use notifications to check if new user has joined.
+    io.emit('notification', { message: "new user has connected"});
+ 
+
+
+    // listen for an incoming message from anyone connected to the app
     socket.on('chat message', function(msg) {
-        // check the message contents
-        console.log('message', msg, 'socket', socket.id);
+        // console.log('message: ', msg, 'socket:', socket.id);
 
-        // send a message to every connected client
-        io.emit('chat message', { id: `${socket.id}`, message: msg });
+        // send the message to everyone connected to the app
+        io.emit('chat message', { id: `${socket.id}`, message: msg, notification: "new user has connected"});
     });
+
+    socket.on('typing', function(name){
+        io.emit('typing', name);
+      });
+      socket.on('stoptyping', function() {
+        io.emit('typing');
+      });
 
     socket.on('disconnect', function() {
         console.log('a user has disconnected');
+        --numUsers;
+        io.emit('usercount', { numUsers: numUsers});
+        io.emit('notification', { message: "a user has disconnected"});
+      
     });
 });
