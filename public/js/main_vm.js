@@ -22,18 +22,22 @@ const vm = new Vue({
         nickname: "",
         message: "",
         notifications: [],
-        typing: false,
         messages: [],
+        typing: false,
         usercount: ""
     },
     watch: {
-        message(value) {
-          value ? socket.emit('typing', this.nickname) : socket.emit('stoptyping');
+        message(line) {
+            if(line){
+                socket.emit('typing', this.nickname);
+            }else{
+                socket.emit('stoptyping');
+            }
         }
       },
     created() {
-        socket.on('typing', (data) => {
-          this.typing = data || "Anonymous";
+        socket.on('typing', (name) => {
+          this.typing = name || "Anonymous";
         });
         socket.on('stoptyping', () => {
           this.typing = false;
@@ -63,5 +67,4 @@ const vm = new Vue({
 
 socket.on('connected', logConnect);
 socket.on('notification', userNotification);
-
 socket.addEventListener('chat message', appendMessage);

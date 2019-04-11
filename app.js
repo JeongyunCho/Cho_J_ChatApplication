@@ -41,8 +41,8 @@ io.on('connection', function(socket) {
         io.emit('chat message', { id: `${socket.id}`, message: msg, notification: "new user has connected"});
     });
 
-    socket.on('typing', function(data){
-        io.emit('typing', data);
+    socket.on('typing', function(name){
+        io.emit('typing', name);
       });
       socket.on('stoptyping', function() {
         io.emit('typing');
